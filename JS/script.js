@@ -285,7 +285,7 @@ function refresh() {
             }
         }
         if (omeletCount < (doll.cost * 0.5) && doll.lvl == 0) {
-            opacityBlock.style.opacity = 0;
+            opacityBlock.outerHTML = '<div id="'+ doll.name + 'Block"></div>';
         }
         if (doll.lvl) {
             let LvlUpButton = l(doll.name + "LvlUpButton");
@@ -637,7 +637,6 @@ function reset() {
     });
     counters.style.display = "none";
     laprasBlock.outerHTML = '<div id="laprasBlock"></div>';
-    desuBlock.innerHTML = ""; 
     omletPerClick.innerHTML = "";
     omletPerSec.innerHTML = "";
     yakultCounter.innerHTML = "";
@@ -689,16 +688,16 @@ function cheat(x) {
     refresh();
 }
 
-function add1Min() {
-    omeletCount += 60 * totalPerSec;
-    omeletTotal += 60 * totalPerSec;
-    yakultTimer -= 60;
+function addMins(x) {
+    omeletCount += 60 * x * totalPerSec;
+    omeletTotal += 60 * x * totalPerSec;
+    yakultTimer -= 60 * x;
     yakultProgress.value = (100 / yakultTime) * (yakultTime - yakultTimer);
     refresh();
 }
 
-function add100yakult() {
-    yakultCount += 100;
+function addYakult(x) {
+    yakultCount += x;
     refreshYakult();
 }
 function openTab(evt, tabName) {

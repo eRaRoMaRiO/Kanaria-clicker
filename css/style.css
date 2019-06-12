@@ -228,6 +228,18 @@ body {
 .optionsBlock{
     margin-bottom: 30px;
 }
+.optionsButton{
+    width: 75px;
+    height: 45px;
+    font-size: 18px;
+}
+
+.reset{
+    margin-right: 50px;
+    background-color: rgb(228, 114, 114);
+
+}
+
 fieldset{
     margin-top: 30px;
 }

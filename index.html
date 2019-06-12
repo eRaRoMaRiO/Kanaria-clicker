@@ -41,14 +41,14 @@
                     <button id="max" class="buyButton">max</button>
                 </div>
                 <div id="cheatButtons" class="cheatButtons">
-                    <button class="buyButton" onclick="add10()">10</button>
-                    <button class="buyButton" onclick="add100()">100</button>
-                    <button class="buyButton" onclick="add1000()">1000</button>
-                    <button class="buyButton" onclick="add10000()">10k</button>
-                    <button class="buyButton" onclick="add1000000()">100k</button>
-                    <button class="buyButton" onclick="add10000000()">10M</button>
-                    <button class="buyButton" onclick="add1Min()">+ 1 min</button>
-                    <button class="buyButton" onclick="add100yakult()">100 yak</button>
+                    <button class="buyButton" onclick="cheat(10)">10</button>
+                    <button class="buyButton" onclick="cheat(100)">100</button>
+                    <button class="buyButton" onclick="cheat(1000)">1000</button>
+                    <button class="buyButton" onclick="cheat(10000)">10k</button>
+                    <button class="buyButton" onclick="cheat(100000)">100k</button>
+                    <button class="buyButton" onclick="cheat(10000000)">10M</button>
+                    <button class="buyButton" onclick="add1Min(1)">+ 1 min</button>
+                    <button class="buyButton" onclick="addYakult(100)">100 yak</button>
                 </div>
                 <img class="kana" src="img/Kana.png" alt="Kana">
                 <img id="omelet" class="omelet" onclick="clickOmelet()" src="img/Omelet.png" alt="Omelet">
@@ -113,9 +113,9 @@
         <div id="optionsTab" class="tabcontent">
             <div class="gameBlock">
                 <div class="optionsBlock">
-                    <button class="menuButton reset" onclick="resetFull()">reset</button>
-                    <button class="menuButton" onclick="save()">save</button>
-                    <button class="menuButton" onclick="load()">load</button>
+                    <button class="optionsButton reset" onclick="resetFull()">reset</button>
+                    <button class="optionsButton" onclick="save()">save</button>
+                    <button class="optionsButton" onclick="load()">load</button>
                     <input type="checkbox" name="Автосейв" id="auSave" checked onchange="autoSave()"> Autosave
                 </div>
                 <hr>
