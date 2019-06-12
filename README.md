@@ -1,1 +1,1 @@
-# Kanaria-clicker.github.io
+Incremental Game about Rozen Maiden
