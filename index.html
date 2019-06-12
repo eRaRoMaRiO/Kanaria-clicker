@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Kanaria likes omlettes</title>
+    <link rel="stylesheet" href="css/style.css?v0.51">
+    <script type="text/javascript" src="https://unpkg.com/popper.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/tooltip.js"></script>
+    <script src="JS/script.js?v0.51" defer></script>
+
+
+</head>
+
+<body>
+    <div class="header">
+        <div class="title"> Kanaria&nbsp;clicker&nbsp;v.&nbsp;0.5 </div>
+    </div>
+    <div class="marginLeft">.</div>
+    <div class="leftScreen">
+        <div class="tab">
+            <button class="tablinks active" onclick="openTab(event, 'omeletTab')" id="defaultOpen"><img class="icon"
+                    src="img/Omelet-icon.png" alt="omelet"></img></button>
+            <button class="tablinks" onclick="openTab(event, 'yakultTab')"><img class="icon" src="img/Yakult-icon.png"
+                    alt="yakult"></img></button>
+            <button class="tablinks" onclick="openTab(event, 'roseTab')"><img class="icon"
+                    src="img/Rosa-Mistica-icon.png" alt="Rosa-Mistica"></img></button>
+            <button class="tablinks options" onclick="openTab(event, 'optionsTab')" style="display: block;"><img
+                    class="icon" src="img/Options-icon.png" alt="Options"></img></button>
+        </div>
+
+        <div id="omeletTab" class="tabcontent">
+            <div class="gameBlock">
+                <div id="buyButtons" class="buyButtons">
+                    <button id="x1" class="buyButton buttonActive">x1</button>
+                    <button id="x10" class="buyButton">x10</button>
+                    <button id="x25" class="buyButton">x25</button>
+                    <button id="max" class="buyButton">max</button>
+                </div>
+                <div id="cheatButtons" class="cheatButtons">
+                    <button class="buyButton" onclick="add10()">10</button>
+                    <button class="buyButton" onclick="add100()">100</button>
+                    <button class="buyButton" onclick="add1000()">1000</button>
+                    <button class="buyButton" onclick="add10000()">10k</button>
+                    <button class="buyButton" onclick="add1000000()">100k</button>
+                    <button class="buyButton" onclick="add10000000()">10M</button>
+                    <button class="buyButton" onclick="add1Min()">+ 1 min</button>
+                    <button class="buyButton" onclick="add100yakult()">100 yak</button>
+                </div>
+                <img class="kana" src="img/Kana.png" alt="Kana">
+                <img id="omelet" class="omelet" onclick="clickOmelet()" src="img/Omelet.png" alt="Omelet">
+
+                <div class="click" id="firstClick" onclick="deleteClick()">Click me!</div>
+                <div id="counters">
+                    <text id="omeletCount"></text> <br>
+                    <text id="omletPerClick"></text> <br>
+                    <text id="omletPerSec"></text> <br>
+                    <text id="yakultCounter"></text>
+                </div>
+                <div id="pops"></div>
+
+            </div>
+        </div>
+
+        <div id="yakultTab" class="tabcontent">
+            <div class="gameBlock">
+                <p class="headline" id="yakultCounter2">Yakult you have: </p>
+                <div>
+                    <div class="yakultBuff">
+                        <img src="img/hina.png" alt="Hina">
+                        <p>Profit <b>x1.5</b></p>
+                        <button id="hinaBuffYakult" onclick="lvlUpYakult(hinaBuff)">Yakult 5</button>
+                    </div>
+                    <div class="yakultBuff">
+                        <img src="img/shinku.png" alt="Shinku">
+                        <p>Profit <b>x1.5</b></p>
+                        <button id="shinkuBuffYakult" onclick="lvlUpYakult(shinkuBuff)">Yakult 5</button>
+                    </div>
+                    <div class="yakultBuff">
+                        <img src="img/Desu+Boku.png" alt="Desu + Boku">
+                        <p>Profit <b>x2</b></p>
+                        <button id="desuBuffYakult" onclick="lvlUpYakult(desuBuff)">Yakult 5</button>
+                    </div>
+                    <div class="yakultBuff">
+                        <img src="img/ginta.png" alt="Ginta">
+                        <p>Profit <b>x3</b></p>
+                        <button id="gintaBuffYakult" onclick="lvlUpYakult(gintaBuff)">Yakult 5</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="roseTab" class="tabcontent">
+            <div class="gameBlock">
+                <p id="rosaCounter" class="headline">Rosa-Misticas you have: </p>
+                <p id="rosaBuffs" class="headline2">Total buff to omelet production: </p>
+                <div class="tabRM">
+                    <button class="tablinksRM active" onclick="openTabRM(event, 'junTab')" ><img class="icon"
+                            src="img/jun.png" alt="jun"></img></button>
+                    <button class="tablinksRM" onclick="openTabRM(event, 'micchanTab')"><img class="icon" src="img/micchan.png"
+                            alt="micchan"></img></button>
+                    <button class="tablinksRM" onclick="openTabRM(event, 'tomoeTab')"><img class="icon"
+                            src="img/tomoe.png" alt="tomoe"></img></button>
+                            <div id = "junTab" class = "tabcontentRM">343</div>
+                            <div id = "micchanTab" class = "tabcontentRM" style = "display: none" >3424</div>
+                            <div id = "tomoeTab" class = "tabcontentRM" style = "display: none" >234234</div>
+                </div>
+            </div>
+        </div>
+        <div id="optionsTab" class="tabcontent">
+            <div class="gameBlock">
+                <div class="optionsBlock">
+                    <button class="menuButton reset" onclick="resetFull()">reset</button>
+                    <button class="menuButton" onclick="save()">save</button>
+                    <button class="menuButton" onclick="load()">load</button>
+                    <input type="checkbox" name="Автосейв" id="auSave" checked onchange="autoSave()"> Autosave
+                </div>
+                <hr>
+                <fieldset>
+                    <legend>Code:</legend>
+                    <input id="code" type="password" size="8">
+                    <input type="submit" value="Submit" onclick="cheatOn()">
+                </fieldset>
+
+                <!-- <br>
+                <br>
+                Патчноуты: <br> -->
+
+            </div>
+        </div>
+
+        <!-- <div id="counters2">
+
+            hina <span id="hinaNext">0</span> <br>
+            desu <span id="desuNext">0</span><br>
+            boku <span id="bokuNext">0</span><br>
+            shinku <span id="shinkuNext">0</span> <br>
+            ginta <span id="gintaNext">0</span><br>
+            kira <span id="kiraNext">0</span><br>
+            bara <span id="baraNext">0</span><br>
+            <br>
+            hina + shinku <span id="hinaValue2">0</span> <br>
+            desu + boku <span id="desuValue2">0</span><br>
+            ginta <span id="gintaValue2">0</span><br>
+            kira <span id="kiraValue2">0</span><br>
+            bara <span id="baraValue2">0</span><br>
+
+        </div> -->
+    </div>
+    <div class="rightScreen">
+
+        <div id="hinaBlock"></div>
+
+        <div id="shinkuBlock"></div>
+
+        <div id="desuBlock"></div>
+
+        <div id="bokuBlock"></div>
+
+        <div id="baraBlock"></div>
+
+        <div id="kiraBlock"></div>
+
+        <div id="gintaBlock"></div>
+
+        <div id="laprasBlock"></div>
+
+    </div>
+    <div>
+        <div id="note" class="popSave">Save game...</div>
+    </div>
+
+</body>
+
+</html>
