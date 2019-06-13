@@ -17,7 +17,7 @@
 
 <body>
     <div class="header">
-        <div class="title"> Kanaria&nbsp;clicker&nbsp;v.&nbsp;0.5 </div>
+        <div class="title"> Kanaria&nbsp;clicker</div>
     </div>
     <div class="marginLeft">.</div>
     <div class="leftScreen">
@@ -50,8 +50,8 @@
                     <button class="buyButton" onclick="add1Min(1)">+ 1 min</button>
                     <button class="buyButton" onclick="addYakult(100)">100 yak</button>
                 </div>
-                <img class="kana" src="img/Kana.png" alt="Kana">
-                <img id="omelet" class="omelet" onclick="clickOmelet()" src="img/Omelet.png" alt="Omelet">
+                <div class="kana"></div>
+                <div id="omelet" class="omelet" onclick="clickOmelet()"></div>
 
                 <div class="click" id="firstClick" onclick="deleteClick()">Click me!</div>
                 <div id="counters">
@@ -104,7 +104,9 @@
                             alt="micchan"></img></button>
                     <button class="tablinksRM" onclick="openTabRM(event, 'tomoeTab')"><img class="icon"
                             src="img/tomoe.png" alt="tomoe"></img></button>
-                            <div id = "junTab" class = "tabcontentRM">343</div>
+                            <div id = "junTab" class = "tabcontentRM">
+                                <button onclick="rmUpgrades(rmBuffs[0][0])"><img src="img/hinaUpg3.png" alt=""></button>
+                            </div>
                             <div id = "micchanTab" class = "tabcontentRM" style = "display: none" >3424</div>
                             <div id = "tomoeTab" class = "tabcontentRM" style = "display: none" >234234</div>
                 </div>
@@ -124,11 +126,6 @@
                     <input id="code" type="password" size="8">
                     <input type="submit" value="Submit" onclick="cheatOn()">
                 </fieldset>
-
-                <!-- <br>
-                <br>
-                Патчноуты: <br> -->
-
             </div>
         </div>
 

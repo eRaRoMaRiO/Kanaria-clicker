@@ -1,17 +1,18 @@
 var clicks = 0, timer = 0, timer2 = 0;
-var omeletCount = 0, totalPerClick = 1, totalPerSec = 0, omeletTotal = 0, globalBonus = 1;
+var omeletCount = 0, totalPerClick = 1, totalPerSec = 0, omeletTotal = 0, globalBonus = 1, clickBonus = 1, perSecBonus = 1;
 var yakultTime = 120, yakultTimer, yakultCount = 0, yakultBuff = 1;
 var rosaCount = 0, rosaCountNext = 0, rosaLvl = 0, rosaNext, rosaBonus = 1, isLapras = false;
+var critChanse = 1, critValue = 1.5;
 var resetWorldCount = 0;
 var buyMult = 1;
 
 var dolls = [
-    hina = { name: "hina", nameFull: "Hinaichigo", lvl: 0, mult: 1.3, bonus: 1, cost: 20, costDef: 20, tooltips: ["x2","+20% to all dolls","x2"] },
-    desu = { name: "desu", nameFull: "Suiseiseki", lvl: 0, mult: 1.3, bonus: 1, cost: 200, costDef: 200, tooltips:  ["x2","+30% to all dolls","x2"] },
-    boku = { name: "boku", nameFull: "Souseiseki", lvl: 0, mult: 1.4, bonus: 1, cost: 2000, costDef: 2000, tooltips:  ["x2 to Suiseiseki","- 90% Suiseiseki cost","x2"] },
+    hina = { name: "hina", nameFull: "Hinaichigo", lvl: 0, mult: 1.3, bonus: 1, cost: 20, costDef: 20, tooltips: ["profit x2","+20% to all dolls","profit x2"] },
+    desu = { name: "desu", nameFull: "Suiseiseki", lvl: 0, mult: 1.3, bonus: 1, cost: 200, costDef: 200, tooltips:  ["profit x2","+30% to all dolls","profit x2"] },
+    boku = { name: "boku", nameFull: "Souseiseki", lvl: 0, mult: 1.4, bonus: 1, cost: 2000, costDef: 2000, tooltips:  ["profit x2 to Suiseiseki","- 90% Suiseiseki cost","profit x2"] },
     shinku = { name: "shinku", nameFull: "Shinku", lvl: 0, mult: 1.4, bonus: 1, cost: 20000, costDef: 20000, tooltips:  ["x1.5 to Hina","- 90% Hina cost","x2 to Hina"] },
     ginta = { name: "ginta", nameFull: "Suigintou", lvl: 0, mult: 1.5, bonus: 1, cost: 200000, costDef: 200000, tooltips:  ["x2 yakult","- 20 sec to yakult timer","x2 yakult"] },
-    kira = { name: "kira", nameFull: "Kirakisho", lvl: 0, mult: 1.8, bonus: 1, cost: 2000000, costDef: 2000000, tooltips:  ["-50% all dolls cost","x1.5 yakult","x2"] },
+    kira = { name: "kira", nameFull: "Kirakisho", lvl: 0, mult: 1.8, bonus: 1, cost: 2000000, costDef: 2000000, tooltips:  ["-50% all dolls cost","x1.5 yakult","profit x2"] },
     bara = { name: "bara", nameFull: "Barasuishou", lvl: 0, mult: 1.9, bonus: 1, cost: 100000000, costDef: 100000000, tooltips:  ["x2 yakult","x1.5 Rosa-Misticas","x1.5 Rosa-Misticas"] },
 ];
 
@@ -30,12 +31,35 @@ var yakultBuffs = [
     gintaBuff = { name: "ginta", lvl: 0, cost: 8, mult: 3}
 ];
 
+var rmBuffs = [
+    // Jun
+    [{name: "1 buff", text: "+20% per sec", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {perSecBonus = multBonus(perSecBonus, rmBuffs[0][0].lvl, 0.2)}},
+    {name: "2 buff", text: "+50% Desu value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {desu.bonus = multBonus(desu.bonus, rmBuffs[0][1].lvl, 0.5)}},
+    {name: "3 buff", text: "+20% Shinku value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {shinku.bonus = multBonus(shinku.bonus, rmBuffs[0][2].lvl, 0.5)}}],
+    // MicChan
+    [{name: "1 buff", text: "+20% per click", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {clickBonus = multBonus(clickBonus, rmBuffs[1][0].lvl, 0.2)}},
+    {name: "2 buff", text: "1% crit chanse", lvl: 0, lvlMax: 15, cost: 2, lvlUp: () => {critChanse += 1}},
+    {name: "3 buff", text: "+100% crit value", lvl: 0, lvlMax: 5, cost: 4, lvlUp: () => {critValue += 1}}],
+    //Tomoe
+    [],
+]
 var omeletPic = '<img class="icon" src="img/Omelet-icon.png" alt="omelet"></img>';
 var yakultPic = '<img class="icon" src="img/Yakult-icon.png" alt="yakult"></img>';
 var rosaPic = '<img class="icon" src="img/Rosa-Mistica-icon.png" alt="Rosa-Mistica"></img>';
 
 function l(what) {return document.getElementById(what);}
 
+
+function multBonus (target, lvl, value){
+    return ((lvl * value + 1) * (target /((lvl - 1) * value + 1)));
+}
+
+function rmUpgrades(buff){
+    buff.lvl++;
+    buff.lvlUp();
+    refresh();
+
+}
 // Перевод чисел в короткую форму:
 var formatShort = ['k', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No'];
 
@@ -51,6 +75,10 @@ function short(value) {
     }
     return (Math.round(value * 100) / 100) + " " + notationValue;
 };
+
+function getRandomInRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
 
 l('x1').onclick = function() {buyButton(1)};
 l('x10').onclick = function() {buyButton(10)};
@@ -130,18 +158,15 @@ window.onload = function () {
         load();
     }
     popsAnimation();
+    autoSave();
 }
-
 function autoSave() {
     if (document.getElementById("auSave").checked == true) {
         timer2 = setInterval(function () {
             save();
         }, 60000);
-        console.log(document.getElementById("auSave").checked);
-    }
-    else {
+    } else {
         clearInterval(timer2);
-        console.log(document.getElementById("auSave").checked);
     }
 }
 
@@ -160,34 +185,47 @@ omelet.onmousemove = function (event) {
 }
 
 function clickOmelet() {
-    omeletCount += totalPerClick;
-    omeletTotal += totalPerClick;
+    let isCrit = false;
+    let value = totalPerClick;
+    if (getRandomInRange(1, 100) <= critChanse){
+        isCrit = true;
+        value *= critValue;
+        
+    }
+    omeletCount += value;
+    omeletTotal += value;
     clicks++;
 
-    if (Pops.length<260) new Pop('omelet','+'+ Math.round(dValue("hina") * dValue("kira") * dValue("bonus") * 100) / 100, popX, popY);
+    if (Pops.length<260) new Pop('omelet','+'+ value, popX, popY, isCrit);
     refresh();
 }
 
 var Pops=[];
-Pop = function(el,str, popX, popY) {
+Pop = function(el,str, popX, popY, isCrit) {
 	this.el=el;
 	this.str=str;
     this.life=0;
     this.popX = popX;
     this.popY = popY;
+    this.isCrit = isCrit;
 	this.offx=Math.floor(Math.random()*30-15);
 	this.offy=Math.floor(Math.random()*30-15);
     Pops.push(this);
 }
-var popsAnimation = function()
-{
+var popsAnimation = function(){
     var str='';
 	for (var i in Pops) {
 	    var x = Math.floor(Pops[i].popX + Pops[i].offx) - 256;
-	    var y = Math.floor(Pops[i].popY - Math.pow(Pops[i].life / 100, 0.5) * 100 + Pops[i].offy) - 100;
 	    var opacity = 1 - Pops[i].life / 100;
-	    str += '<div class="pop" style="position:absolute;left:' + x + 'px;top:' + y + 'px;opacity:' + opacity + ';">' + Pops[i].str + omeletPic + '</div>';
-	    Pops[i].life += 1;
+        if (Pops[i].isCrit){
+            var y = Math.floor(Pops[i].popY - Math.pow(Pops[i].life / 20, 0.5) * 100 + Pops[i].offy) - 100;
+            str += '<div class="pop crit" style="position:absolute;left:' + x + 'px;top:' + y + 'px;opacity:' + opacity + ';">' + short(Pops[i].str) + omeletPic + '</div>';
+            Pops[i].life += 0.7;
+        } else {
+        var y = Math.floor(Pops[i].popY - Math.pow(Pops[i].life / 100, 0.5) * 100 + Pops[i].offy) - 100;
+        str += '<div class="pop" style="position:absolute;left:' + x + 'px;top:' + y + 'px;opacity:' + opacity + ';">' + short(Pops[i].str) + omeletPic + '</div>';
+        Pops[i].life += 1;
+        }
 	    if (Pops[i].life >= 100) Pops.splice(i, 1);
 	}
 
@@ -223,7 +261,7 @@ function dValue(doll){
 
 function nextLvl(doll){
     doll.lvl++;
-    let dollNext2 = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus") * 100) / 100 - totalPerSec;
+    let dollNext2 = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus")  * clickBonus * perSecBonus * 100) / 100 - totalPerSec;
     doll.lvl--;
     return (Math.round(dollNext2*100)/100 + " --- " + (Math.round(doll.cost / dollNext2)* 1000) / 1000);
 }
@@ -246,8 +284,8 @@ function refreshYakult() {
 
 function refresh() {
     document.getElementById("omeletCount").innerHTML =  omeletPic + "<text class = 'textCount'> you have: </text>" + short(omeletCount);
-    totalPerClick = Math.round(dValue("hina") * dValue("kira") * dValue("bonus") * 100) / 100;
-    totalPerSec = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus") * 100) / 100;
+    totalPerClick = Math.round(dValue("hina") * dValue("kira") * dValue("bonus")  * clickBonus * 100) / 100;
+    totalPerSec = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus") * perSecBonus * 100) / 100;
     document.title = short(omeletCount) + " omelets";
     if (totalPerClick > 0) {
         omletPerClick.innerHTML = omeletPic + "<text class = 'textCount'> per click: </text>" + short(totalPerClick);
@@ -274,7 +312,7 @@ function refresh() {
         let opacityBlock = l(doll.name + "Block");
         if (doll.name == "hina" || doll.name == "desu" || (desu.lvl && doll.name != "bara") || (doll.name == "bara" && resetWorldCount && isLapras)) {
             if (omeletCount >= (doll.cost * 0.5) && omeletCount < doll.cost && doll.lvl == 0) {
-                opacityBlock.innerHTML = '<div class ="button ' + doll.name + 'Button  ">' + hireText
+                opacityBlock.innerHTML = '<div class ="button ' + doll.name + 'Button  ">' + hireText;
                 opacityBlock.style.opacity = ((omeletCount/doll.cost) - 0.45) * 2;
                 opacityBlock.style.cursor = "auto";
             }
@@ -659,6 +697,7 @@ function resetFull() {
     rosaLvl = 0;
     document.getElementById("defaultOpen").click();
     tablinks = document.getElementsByClassName("tablinks");
+    buyButtons.style.display = "none";
     for (i = 1; i < tablinks.length; i++) {
         tablinks[i].style.display = "none";
       }
