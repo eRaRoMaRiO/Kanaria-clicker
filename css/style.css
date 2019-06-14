@@ -169,14 +169,16 @@ body {
     border-radius: 10px;
 }
 .buyButton, .cheatButton {
-    font-size: 14px;
+    font-size: 16px;
     padding-right: 4px;
     width: 40px;
     height: 40px;
     margin: 5px;
     cursor: pointer;
     border-radius: 10px;
+    background-color: #ece8e8;
 }
+
 .buyButton:hover, .cheatButton:hover{
     background: #cccfbb;
     color: #353030;
@@ -186,7 +188,18 @@ body {
     color: #dfd9d9;
     text-shadow: 1px 0 2px #000000;
 }
+.rmButton{
+    background: url(../img/Rosa-Mistica-icon.png) no-repeat 50% 50% #ece8e8;
 
+}
+.yakultButton{
+    background: url(../img/Yakult-icon.png) no-repeat 50% 50% #ece8e8;
+
+}
+.timeButton{
+    background: url(../img/time.png) no-repeat 50% 50% #ece8e8;
+
+}
 .headline {
     margin-top: 40px;
     margin-left: 50px;
@@ -464,6 +477,7 @@ fieldset{
     margin-top: 31px; 
     width: 400px;
     height: 145px;
+    z-index: -5;
   }
   .tabRM>button {
     position: relative;
@@ -542,8 +556,9 @@ fieldset{
   }
   .tabcontentRM {
     margin-top: -3px;
-    width: 394px;
-    height: 353px;
+    padding: 10px 20px;
+    width: 354px;
+    height: 325px;
     border: 2px solid #31313167;
     background-color: #ccb47c;
   }
@@ -566,12 +581,12 @@ fieldset{
     color: black;
     margin: 20px;
     padding: 16px;  
-    z-index: 200;
-    border-radius: 5px;
-    
+    z-index: 1200;
+    border-radius: 5px;    
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.25), 0 6px 20px 0 rgba(0, 0, 0, 0.35);
     text-shadow: 2px 2px 2px 2px rgba(255, 255, 255, 0.5), 2px 2px 2px 2px rgba(255, 255, 255, 0.5);
-  }
+    white-space: pre-wrap;  
+}
 
   #pops
 {
@@ -588,7 +603,7 @@ fieldset{
 	width:200px;
 	height:20px;
 	font-size:28px;
-	text-align:center;
+    text-align:center;
 }   
 
 .crit {
@@ -611,4 +626,77 @@ fieldset{
     border-radius: 10px;
     transition: 1s;
     opacity: 0.9;
+}
+.upgradeRM{
+    position: relative;
+    width: 70px;
+    height: 70px;
+    margin: 0 10px;
+    border-radius: 35px;
+    border: none;
+}
+.upgradeRM>span>img{
+    position: absolute;
+    top: 40px;
+    left: 3px;
+}
+.wrapperH3{
+    text-align: center;
+    width: 379px;
+    height: 90px;
+    margin-top: -23px;
+}
+
+.headline3{
+    font-size: 18px;
+}
+.rmCost{
+    display: block;
+    font-size: 18px;
+    margin-left: 28px;
+    margin-top: 6px;
+
+}
+.rmCostWrap{
+    background-color: #63b45c;
+    border: 1px solid #31313167;
+    border-radius: 3px;
+    height: 29px;
+    width: 66px;
+    position: absolute;
+}
+.upgradeRM:hover .rmCostWrap{
+    background-color: #7ed177;
+    margin-left: -1px;
+}
+.upgradeRM:hover{
+    border: 1px solid #31313167;
+}
+.rmCostWrap:hover{
+    background-color: #9feb98;
+}
+.rmCostWrap.rmLvlUpNo, .rmCostWrap.rmLvlUpNo:hover, .upgradeRM:hover .rmCostWrap.rmLvlUpNo {
+    background-color: #b46e5c;
+}
+
+.upgradeRM:after{
+    background-color: #1ca527;
+}
+.lvlUpMax, rmCostWrap.lvlUpMax, .rmCostWrap.lvlUpMax:hover, .upgradeRM:hover .rmCostWrap.lvlUpMax {
+    background-color: #a38f4c;
+    color: #312905;
+}
+.upgradeMax{
+    background-color: #8d872fa9;
+}
+.rmCostMax{
+    margin-left: 0px;
+    margin-top: 3px;
+}
+.rmPic{
+    position: absolute;
+    left: 5px;
+    background: url(../img/Rosa-Mistica-icon.png) no-repeat 50% 50% ;
+    width: 27px;
+    height: 28px;
 }

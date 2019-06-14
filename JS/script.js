@@ -33,13 +33,13 @@ var yakultBuffs = [
 
 var rmBuffs = [
     // Jun
-    [{name: "1 buff", text: "+20% per sec", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {perSecBonus = multBonus(perSecBonus, rmBuffs[0][0].lvl, 0.2)}},
-    {name: "2 buff", text: "+50% Desu value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {desu.bonus = multBonus(desu.bonus, rmBuffs[0][1].lvl, 0.5)}},
-    {name: "3 buff", text: "+20% Shinku value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {shinku.bonus = multBonus(shinku.bonus, rmBuffs[0][2].lvl, 0.5)}}],
+    [{id: "buff00", name: "1 buff", text: "+20% per sec", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {perSecBonus = multBonus(perSecBonus, rmBuffs[0][0].lvl, 0.2)}},
+    {id: "buff01", name: "2 buff", text: "+50% Desu value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {desu.bonus = multBonus(desu.bonus, rmBuffs[0][1].lvl, 0.5)}},
+    {id: "buff02", name: "3 buff", text: "+50% Shinku value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {shinku.bonus = multBonus(shinku.bonus, rmBuffs[0][2].lvl, 0.5)}}],
     // MicChan
-    [{name: "1 buff", text: "+20% per click", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {clickBonus = multBonus(clickBonus, rmBuffs[1][0].lvl, 0.2)}},
-    {name: "2 buff", text: "1% crit chanse", lvl: 0, lvlMax: 15, cost: 2, lvlUp: () => {critChanse += 1}},
-    {name: "3 buff", text: "+100% crit value", lvl: 0, lvlMax: 5, cost: 4, lvlUp: () => {critValue += 1}}],
+    [{id: "buff10", name: "1 buff", text: "+20% per click", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {clickBonus = multBonus(clickBonus, rmBuffs[1][0].lvl, 0.2)}},
+    {id: "buff11", name: "2 buff", text: "1% crit chanse", lvl: 0, lvlMax: 15, cost: 2, lvlUp: () => {critChanse += 1}},
+    {id: "buff12", name: "3 buff", text: "+100% crit value", lvl: 0, lvlMax: 5, cost: 4, lvlUp: () => {critValue += 1}}],
     //Tomoe
     [],
 ]
@@ -54,11 +54,29 @@ function multBonus (target, lvl, value){
     return ((lvl * value + 1) * (target /((lvl - 1) * value + 1)));
 }
 
-function rmUpgrades(buff){
-    buff.lvl++;
-    buff.lvlUp();
+function rmUpgrades(buff) {
+    let newCost = (buff.lvl + 1) * buff.cost;
+    if (rosaCount >= newCost) {
+        if (buff.lvl < buff.lvlMax) {
+            rosaCount -= newCost;
+            buff.lvl++;
+            buff.lvlUp();
+            refreshRM();
+            buff.tooltip.updateTitleContent(`${buff.name} (${buff.lvl}/${buff.lvlMax}) \n \n ${buff.text}`);
+            checkRMBuffs(buff);
+        }
+    }
     refresh();
+}
 
+function checkRMBuffs(buff){
+    newCost = (buff.lvl + 1) * buff.cost;
+    l(buff.id + "Text").innerHTML = `<div class="rmPic"></div> <span class = "rmCost"> ${newCost} </span>`; 
+    if (buff.lvl == buff.lvlMax) {
+        l(buff.id).classList.add('upgradeMax');
+        l(buff.id + "Text").innerHTML = '<span class="rmCost rmCostMax">max</span>';
+        l(buff.id + "Text").classList.add('lvlUpMax');
+    }
 }
 // Перевод чисел в короткую форму:
 var formatShort = ['k', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No'];
@@ -159,6 +177,13 @@ window.onload = function () {
     }
     popsAnimation();
     autoSave();
+    for (let i = 0; i < rmBuffs.length; i++){
+        for(let k = 0; k < rmBuffs[i].length; k++){
+            let innerText = `${rmBuffs[i][k].name} (${rmBuffs[i][k].lvl}/${rmBuffs[i][k].lvlMax}) \n\n ${rmBuffs[i][k].text}`;
+            rmBuffs[i][k].tooltip = tooltips(innerText, rmBuffs[i][k].id);
+        }
+    }
+
 }
 function autoSave() {
     if (document.getElementById("auSave").checked == true) {
@@ -220,17 +245,17 @@ var popsAnimation = function(){
         if (Pops[i].isCrit){
             var y = Math.floor(Pops[i].popY - Math.pow(Pops[i].life / 20, 0.5) * 100 + Pops[i].offy) - 100;
             str += '<div class="pop crit" style="position:absolute;left:' + x + 'px;top:' + y + 'px;opacity:' + opacity + ';">' + short(Pops[i].str) + omeletPic + '</div>';
-            Pops[i].life += 0.7;
+            Pops[i].life += 1;
         } else {
         var y = Math.floor(Pops[i].popY - Math.pow(Pops[i].life / 100, 0.5) * 100 + Pops[i].offy) - 100;
         str += '<div class="pop" style="position:absolute;left:' + x + 'px;top:' + y + 'px;opacity:' + opacity + ';">' + short(Pops[i].str) + omeletPic + '</div>';
-        Pops[i].life += 1;
+        Pops[i].life += 1.5;
         }
 	    if (Pops[i].life >= 100) Pops.splice(i, 1);
 	}
 
     l('pops').innerHTML=str;
-	setTimeout(popsAnimation, 1000/120);
+	setTimeout(popsAnimation, 1000/90);
 }
 function dValue(doll){
     if (doll == "hina"){
@@ -255,7 +280,7 @@ function dValue(doll){
         return bara.lvl * 5000 * bara.bonus;
     }
     if (doll == "bonus"){
-        return (rosaCount * 0.5 + 1) * globalBonus;
+        return (rosaLvl * 0.5 + 1) * globalBonus;
     }
 }
 
@@ -265,6 +290,25 @@ function nextLvl(doll){
     doll.lvl--;
     return (Math.round(dollNext2*100)/100 + " --- " + (Math.round(doll.cost / dollNext2)* 1000) / 1000);
 }
+
+function refreshRM(){
+    for (let i = 0; i < rmBuffs.length; i++){
+        for(let k = 0; k < rmBuffs[i].length; k++){
+
+            if(rmBuffs[i][k].cost * (rmBuffs[i][k].lvl + 1) > rosaCount){
+                l(rmBuffs[i][k].id).classList.add('lvlUpNo');
+                l(rmBuffs[i][k].id + "Text").classList.add('rmLvlUpNo');
+                console.log(l(rmBuffs[i][k].id + "Cost"));
+            } else {
+                l(rmBuffs[i][k].id).classList.remove('lvlUpNo');
+                l(rmBuffs[i][k].id + "Text").classList.remove('lvlUpNo');
+            }
+        }
+    }
+    l('rosaCounter').innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
+    rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" +  short(rosaLvl * 50) + "%";
+}
+
 function refreshYakult() {
     if (yakultCount || ginta.lvl) {
         yakultCounter.innerHTML = yakultPic + "<text class ='textCount'>&nbsp; you have: </text>" + short(yakultCount);
@@ -308,22 +352,22 @@ function refresh() {
     // baraValue2.innerHTML = dValue("bara");
 
     dolls.forEach(function (doll = {name, lvl, cost}) {
-        let hireText = '<p class = "buttonText">Hire ' + doll.nameFull + '<br>for ' + short(doll.cost) + ' ' + omeletPic + '</p></div>';
-        let opacityBlock = l(doll.name + "Block");
+        let dollBlock = l(doll.name + "Block");
         if (doll.name == "hina" || doll.name == "desu" || (desu.lvl && doll.name != "bara") || (doll.name == "bara" && resetWorldCount && isLapras)) {
-            if (omeletCount >= (doll.cost * 0.5) && omeletCount < doll.cost && doll.lvl == 0) {
-                opacityBlock.innerHTML = '<div class ="button ' + doll.name + 'Button  ">' + hireText;
-                opacityBlock.style.opacity = ((omeletCount/doll.cost) - 0.45) * 2;
-                opacityBlock.style.cursor = "auto";
+            if (doll.lvl == 0 && omeletCount >= (doll.cost * 0.5) && omeletCount < doll.cost) {
+                let hireText = '<p class = "buttonText">Hire ' + doll.nameFull + '<br>for ' + short(doll.cost) + ' ' + omeletPic + '</p></div>';
+                dollBlock.innerHTML = '<div class ="button ' + doll.name + 'Button  ">' + hireText;
+                dollBlock.style.opacity = ((omeletCount/doll.cost) - 0.45) * 2;
+                dollBlock.style.cursor = "auto";
             }
-            if (omeletCount >= doll.cost && doll.lvl == 0) {
-                opacityBlock.innerHTML = '<button class ="button ' + doll.name + "Button" + '"onclick="addDoll(' + doll.name + ')"><p class = "buttonText">Hire ' + doll.nameFull + '<br>for ' + short(doll.cost) + ' ' + omeletPic + '</p></button>'
-                opacityBlock.style.opacity = 1;
-                opacityBlock.style.cursor = "pointer";
+            if (doll.lvl == 0 && omeletCount >= doll.cost) {
+                dollBlock.innerHTML = '<button class ="button ' + doll.name + "Button" + '"onclick="addDoll(' + doll.name + ')"><p class = "buttonText">Hire ' + doll.nameFull + '<br>for ' + short(doll.cost) + ' ' + omeletPic + '</p></button>'
+                dollBlock.style.opacity = 1;
+                dollBlock.style.cursor = "pointer";
             }
         }
-        if (omeletCount < (doll.cost * 0.5) && doll.lvl == 0) {
-            opacityBlock.outerHTML = '<div id="'+ doll.name + 'Block"></div>';
+        if (doll.lvl == 0 && omeletCount < (doll.cost * 0.5)) {
+            dollBlock.outerHTML = '<div id="'+ doll.name + 'Block"></div>';
         }
         if (doll.lvl) {
             let LvlUpButton = l(doll.name + "LvlUpButton");
@@ -346,15 +390,15 @@ function refresh() {
             yakultPlus.innerHTML = "+ " + ginta.lvl * yakultBuff + "&nbsp;" + yakultPic; 
         }
     })
-    if (omeletTotal > (Math.pow((rosaLvl + 1),2) * 20000000) && kira.lvl && isLapras == false){
+    if (omeletTotal > (Math.pow((rosaLvl + 1),2.5) * 20000000) && kira.lvl && isLapras == false){
         laprasBlock.outerHTML = '<div class = "button laprasBlock" id="laprasBlock"><span id="total"></span><br><button id="restartText" class = "restartButton" onclick="resetWorld()"></button></div>';
         isLapras = true;
     }
     if (isLapras){
-        rosaNext = Math.floor(Math.sqrt(omeletTotal/20000000)) - rosaLvl;
+        rosaNext = Math.floor(Math.pow(omeletTotal/20000000, 0.4)) - rosaLvl;
         rosaCountNext = Math.floor(rosaNext * (1 + bara.lvl * 0.1) * rosaBonus);
         restartText.innerHTML = `Restart world <br>and  get ${rosaCountNext} ${rosaPic}`;
-        let omeletsForNextRose = short((Math.pow((rosaLvl + rosaNext + 1),2) * 20000000) - omeletTotal);
+        let omeletsForNextRose = short((Math.pow((rosaLvl + rosaNext + 1),2.5) * 20000000) - omeletTotal);
         total.innerHTML = `Produce ${omeletsForNextRose} ${omeletPic} <br> for next ${rosaPic}`;
     }
 }
@@ -536,6 +580,13 @@ function save() {
         localStorage.setItem(doll.name + " cost", doll.cost);
         localStorage.setItem(doll.name + " bonus", doll.bonus);
     });
+
+    for (let i = 0; i < rmBuffs.length; i++){
+        for(let k = 0; k < rmBuffs[i].length; k++){
+            localStorage.setItem(rmBuffs[i][k].id + " lvl", rmBuffs[i][k].lvl)
+        }
+    }
+
     localStorage.setItem("chSave", document.getElementById("auSave").checked);
     console.log(JSON.parse(localStorage.getItem("chSave")));
     yakultBuffs.forEach(function (doll = { name, lvl, cost }) {
@@ -545,6 +596,7 @@ function save() {
     note.style.display = "block";
     setTimeout(function() { note.style.display = "none"; }, 5000);
 }
+
 function load() {
     omeletCount = parseFloat(localStorage.getItem("omeletCount"));
     if (!omeletCount && omeletCount !== 0){
@@ -596,6 +648,14 @@ function load() {
 
         };
     });
+
+    for (let i = 0; i < rmBuffs.length; i++){
+        for(let k = 0; k < rmBuffs[i].length; k++){
+            rmBuffs[i][k].lvl = parseInt(localStorage.getItem(rmBuffs[i][k].id + " lvl"));
+            checkRMBuffs(rmBuffs[i][k]);
+        }
+    }
+
     yakultBuffs.forEach(function (doll = {
         name,
         lvl,
@@ -636,8 +696,7 @@ function load() {
     }
     if (rosaCount) {
         tablinks[2].style.display = "block";
-        rosaCounter.innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
-        rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" +  short(rosaCount * 50) + "%";
+        refreshRM();
         buyButtons.style.display = "block";
     }
     tablinks[3].style.display = "block";
@@ -651,8 +710,7 @@ function resetWorld() {
     tablinks[2].style.display = "block";
     tablinks[1].style.display = "none";
     buyButtons.style.display = "block";
-    rosaCounter.innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
-    rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" +  short(rosaCount * 50) + "%";
+    refreshRM();
     reset();
 }
 function reset() {
@@ -673,6 +731,11 @@ function reset() {
     yakultBuffs.forEach(function (doll = { name, lvl, cost }) {
         doll.lvl = 0;
     });
+    for (let i = 0; i < rmBuffs.length; i++){
+        for(let k = 0; k < rmBuffs[i].length; k++){
+            rmBuffs[i][k].lvl = 0;
+        }
+    }
     counters.style.display = "none";
     laprasBlock.outerHTML = '<div id="laprasBlock"></div>';
     omletPerClick.innerHTML = "";
@@ -721,24 +784,30 @@ function cheatOn(){
     setTimeout(function() { note.style.display = "none"; }, 5000);
 }
 
-function cheat(x) {
-    omeletCount += x;
-    omeletTotal += x;
+function cheat(x, target) {
+    if (target == 'omelet') {
+        omeletCount += x;
+        omeletTotal += x;
+    }
+    if (target == 'minute') {
+        omeletCount += 60 * x * totalPerSec;
+        omeletTotal += 60 * x * totalPerSec;
+        if (ginta.lvl) {
+            yakultTimer -= 60 * x;
+            l('yakultProgress').value = (100 / yakultTime) * (yakultTime - yakultTimer);
+        }
+    }
+    if (target == 'yakult') {
+        yakultCount += x;
+        refreshYakult();
+    }
+    if (target == 'rm') {
+        rosaCount += x;
+        refreshRM();
+    }
     refresh();
 }
 
-function addMins(x) {
-    omeletCount += 60 * x * totalPerSec;
-    omeletTotal += 60 * x * totalPerSec;
-    yakultTimer -= 60 * x;
-    yakultProgress.value = (100 / yakultTime) * (yakultTime - yakultTimer);
-    refresh();
-}
-
-function addYakult(x) {
-    yakultCount += x;
-    refreshYakult();
-}
 function openTab(evt, tabName) {
     var i, tabcontent, tablinks;
     tabcontent = document.getElementsByClassName("tabcontent");
@@ -766,14 +835,18 @@ function openTab(evt, tabName) {
     evt.currentTarget.className += " active";
   }
 
-  function tooltips(text, id){ new Tooltip(document.getElementById(id), {
-    title: text,
-    id: id + 1,
-    trigger: "hover",
-    delay: {
-        show: 300,
-    },
-    });}
+function tooltips(text, id) { tooltip = new Tooltip(document.getElementById(id), {
+        title: text,
+        id: id,
+        trigger: "hover",
+        delay: {
+            show: 300,
+        },
+
+    });
+    return tooltip;
+}
+
 
 function buy(x, cost, mult) {
     let step = cost,
