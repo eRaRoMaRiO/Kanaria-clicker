@@ -132,15 +132,15 @@
                         <hr>
                         <span class="headline3">Tier 3</span>
                         <div class="wrapperH3">
-                            <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
+                            <button id="buff03" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
                                 <img src="img/hinaUpg2.png">
                                 <div class="rmCostWrap" id="buff03Text"> </div>
                             </button>
-                            <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
+                            <button id="buff04" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
                                 <img src="img/hinaUpg2.png">
                                 <div class="rmCostWrap" id="buff04Text"> </div>
                             </button>
-                            <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
+                            <button id="buff05" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
                                 <img src="img/hinaUpg2.png">
                                 <div class="rmCostWrap" id="buff05Text"> </div>
                             </button>
@@ -181,7 +181,7 @@
                         <span class="headline3">Tier 1</span>
                         <div class="wrapperH3">
                             <button id="buff20" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][0])">
-                                <img src="img/hinaUpg3.png">
+                                <img src="img/baraUpg1.png">
                                 <div class="rmCostWrap" id="buff20Text"></div>
                             </button>
                         </div>
@@ -189,11 +189,11 @@
                         <span class="headline3">Tier 2</span>
                         <div class="wrapperH3">
                             <button id="buff21" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][1])">
-                                <img src="img/hinaUpg3.png">
+                                <img src="img/baraUpg2.png">
                                 <div class="rmCostWrap" id="buff21Text"></div>
                             </button>
                             <button id="buff22" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][2])">
-                                <img src="img/hinaUpg3.png">
+                                <img src="img/gintaUpg2.png">
                                 <div class="rmCostWrap" id="buff22Text"></div>
                             </button>
                         </div>
@@ -212,7 +212,7 @@
         <div id="optionsTab" class="tabcontent" style="display: none">
             <div class="gameBlock">
                 <div class="optionsBlock">
-                    <button class="optionsButton reset" onclick="resetFull()">reset</button>
+                    <button class="optionsButton reset" onclick="showAlert()">reset</button>
                     <button class="optionsButton" onclick="save()">save</button>
                     <button class="optionsButton" onclick="load()">load</button>
                     <input type="checkbox" name="Автосейв" id="auSave" checked onchange="autoSave()"> Autosave
@@ -265,6 +265,17 @@
     </div>
     <div>
         <div id="note" class="popSave">Save game...</div>
+    </div>
+    <div id="darkFon"></div>
+    <div id="alertWindow">
+        <div class = "alertWrapper">
+        <div id= "titleAlert">Hard reset</div>
+        <div id= "textAlert">Do you want to wipe your save? <br> You will lose all your progress!</div>
+        <div id = "alertButtons">
+            <button id = "alertYes">Yes</button>
+            <button id = "alertNo">No</button>
+        </div>
+    </div>
     </div>
 
 </body>

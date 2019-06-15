@@ -28,7 +28,19 @@ body {
     background-color: rgba(139, 125, 98, 0.794);
     border-bottom: 1px solid black;
     text-align: center;
+    overflow: hidden;
 }
+@media all and (max-width: 1335px) {
+    .header{
+        width: 1335px;
+    }
+}
+@media all and (max-width: 608px) {
+    .header{
+        width: 645px;
+    }
+}
+
 .contacts{
     float: left;
     margin-left: 15px;
@@ -172,7 +184,7 @@ body {
     border-radius: 10px;
 }
 .cheatButtons {
-    display: block;
+    display: none;
     position: absolute;
     left: 10px;
     top: 10px;
@@ -727,4 +739,73 @@ fieldset{
 .levelBuff{
     font-size: 20px;
     font-weight: bold;
+}
+
+#darkFon{
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #0000009d;
+    z-index: 1000;
+}
+
+#alertWindow{
+    display: none;
+    position: fixed;
+    left: 40%;
+    top: 30%;
+    width: 350px;
+    height: 200px;
+    border: 3px groove #f7fcb3;
+    background-color: rgba(44, 33, 11, 0.815);
+    z-index: 10000;
+}
+.alertWrapper{
+    position: relative;
+    text-align: center;
+    padding: 20px;
+}
+
+#titleAlert{
+    font-size: 28px;
+    color: #c2c18b;
+}
+
+#textAlert{
+    font-size: 20px;
+    color: #e9e8c8;
+    margin-top: 20px;
+}
+#alertButtons{
+    margin-top: 20px;
+}
+#alertButtons>button{
+    font-size: 18px;
+    margin-left: 20px;
+    margin-right: 20px;
+    width: 45px;
+    height: 35px;
+    color: #eedb8f;
+    background-color: #3f3406;
+    border: 1px solid #eedb8f;
+}
+
+#alertButtons>button:hover{
+    color: #f8f6ef;
+    background-color: #574d29;
+    border: 1px solid #f8f6ef;
+}
+#alertButtons>button:active{
+    color: #c7c5bf;
+    background-color: #443c21;
+    border: 1px solid #c7c5bf;
+}
+
+#alertButtons.windUp>button{
+    width: 115px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
