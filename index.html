@@ -17,6 +17,10 @@
 
 <body>
     <div class="header">
+        <div class = "contacts">
+            <a class = "vk" href="https://vk.com/kanariakashira" target="_blank"><img src="img/vk.png" alt="VK.com"></a>
+            <a class = "gitHub" href="https://github.com/eRaRoMaRiO" target="_blank"><img src="img/github.png" alt="github.com"></a>
+        </div>
         <div class="title"> Kanaria&nbsp;clicker</div>
     </div>
     <div class="marginLeft">.</div>
@@ -24,9 +28,9 @@
         <div class="tab">
             <button class="tablinks active" onclick="openTab(event, 'omeletTab')" id="defaultOpen"><img class="icon"
                     src="img/Omelet-icon.png" alt="omelet"></img></button>
-            <button class="tablinks" onclick="openTab(event, 'yakultTab')"><img class="icon" src="img/Yakult-icon.png"
+            <button class="tablinks" onclick="openTab(event, 'yakultTab')" style="display: none"><img class="icon" src="img/Yakult-icon.png"
                     alt="yakult"></img></button>
-            <button class="tablinks" onclick="openTab(event, 'roseTab')"><img class="icon"
+            <button class="tablinks" onclick="openTab(event, 'roseTab')" style="display: none"><img class="icon"
                     src="img/Rosa-Mistica-icon.png" alt="Rosa-Mistica"></img></button>
             <button class="tablinks options" onclick="openTab(event, 'optionsTab')" style="display: block;"><img
                     class="icon" src="img/Options-icon.png" alt="Options"></img></button>
@@ -65,7 +69,7 @@
             </div>
         </div>
 
-        <div id="yakultTab" class="tabcontent">
+        <div id="yakultTab" class="tabcontent" style="display: none">
             <div class="gameBlock">
                 <p class="headline" id="yakultCounter2">Yakult you have: </p>
                 <div>
@@ -93,7 +97,7 @@
             </div>
         </div>
 
-        <div id="roseTab" class="tabcontent">
+        <div id="roseTab" class="tabcontent" style="display: none">
             <div class="gameBlock">
                 <p id="rosaCounter" class="headline">Rosa-Misticas you have: </p>
                 <p id="rosaBuffs" class="headline2">Total buff to omelet production: </p>
@@ -113,11 +117,9 @@
                                 <div class="rmCostWrap" id="buff00Text"></div>
                             </button>
                         </div>
-
-
-                            <hr>
-                            <span class="headline3">Tier 2</span>
-                            <div class="wrapperH3">
+                        <hr>
+                        <span class="headline3">Tier 2</span>
+                        <div class="wrapperH3">
                             <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
                                 <img src="img/hinaUpg2.png">
                                 <div class="rmCostWrap" id="buff01Text"> </div>
@@ -127,49 +129,87 @@
                                 <div class="rmCostWrap" id="buff02Text"> </div>
                             </button>
                         </div>
-
-                            <hr>
-                            <span class="headline3">Tier 3</span>
-                            <div class="wrapperH3">
+                        <hr>
+                        <span class="headline3">Tier 3</span>
+                        <div class="wrapperH3">
                             <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
                                 <img src="img/hinaUpg2.png">
-                                <div class="rmCostWrap" id="buff01Text"> </div>
+                                <div class="rmCostWrap" id="buff03Text"> </div>
                             </button>
                             <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
-                                    <img src="img/hinaUpg2.png">
-                                    <div class="rmCostWrap" id="buff01Text"> </div>
-                                </button>
-                                <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
-                                        <img src="img/hinaUpg2.png">
-                                        <div class="rmCostWrap" id="buff01Text"> </div>
-                                    </button>
+                                <img src="img/hinaUpg2.png">
+                                <div class="rmCostWrap" id="buff04Text"> </div>
+                            </button>
+                            <button id="buff01" class="upgradeRM" onclick="rmUpgrades(rmBuffs[0][1])">
+                                <img src="img/hinaUpg2.png">
+                                <div class="rmCostWrap" id="buff05Text"> </div>
+                            </button>
                         </div>
                     </div>
                     <div id="micchanTab" class="tabcontentRM" style="display: none">
+                        <hr>
+                        <span class="headline3">Tier 1</span>
                         <div class="wrapperH3">
-                            <span class="headline3">Tier 1</span>
-                            <hr>
                             <button id="buff10" class="upgradeRM" onclick="rmUpgrades(rmBuffs[1][0])">
-                                <img src="img/desuUpg3.png">
-                                <div class="rmCostWrap" id="buff10Text"> </div>
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff10Text"></div>
                             </button>
-                            <span class="headline3">Tier 2</span>
-                            <hr>
+                        </div>
+                        <hr>
+                        <span class="headline3">Tier 2</span>
+                        <div class="wrapperH3">
                             <button id="buff11" class="upgradeRM" onclick="rmUpgrades(rmBuffs[1][1])">
-                                <img src="img/desuUpg2.png">
-                                <div class="rmCostWrap" id="buff11Text"> </div>
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff11Text"></div>
                             </button>
                             <button id="buff12" class="upgradeRM" onclick="rmUpgrades(rmBuffs[1][2])">
-                                <img src="img/desuUpg1.png">
-                                <div class="rmCostWrap" id="buff12Text"> </div>
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff12Text"></div>
+                            </button>
+                        </div>
+                        <hr>
+                        <span class="headline3">Tier 3</span>
+                        <div class="wrapperH3">
+                            <button id="buff13" class="upgradeRM" onclick="rmUpgrades(rmBuffs[1][3])">
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff13Text"></div>
                             </button>
                         </div>
                     </div>
-                    <div id="tomoeTab" class="tabcontentRM" style="display: none">234234</div>
+                    <div id="tomoeTab" class="tabcontentRM" style="display: none">
+                        <hr>
+                        <span class="headline3">Tier 1</span>
+                        <div class="wrapperH3">
+                            <button id="buff20" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][0])">
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff20Text"></div>
+                            </button>
+                        </div>
+                        <hr>
+                        <span class="headline3">Tier 2</span>
+                        <div class="wrapperH3">
+                            <button id="buff21" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][1])">
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff21Text"></div>
+                            </button>
+                            <button id="buff22" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][2])">
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff22Text"></div>
+                            </button>
+                        </div>
+                        <hr>
+                        <span class="headline3">Tier 3</span>
+                        <div class="wrapperH3">
+                            <button id="buff23" class="upgradeRM" onclick="rmUpgrades(rmBuffs[2][3])">
+                                <img src="img/hinaUpg3.png">
+                                <div class="rmCostWrap" id="buff23Text"></div>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div id="optionsTab" class="tabcontent">
+        <div id="optionsTab" class="tabcontent" style="display: none">
             <div class="gameBlock">
                 <div class="optionsBlock">
                     <button class="optionsButton reset" onclick="resetFull()">reset</button>

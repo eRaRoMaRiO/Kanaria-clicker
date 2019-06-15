@@ -1,28 +1,139 @@
-var clicks = 0, timer = 0, timer2 = 0;
-var omeletCount = 0, totalPerClick = 1, totalPerSec = 0, omeletTotal = 0, globalBonus = 1, clickBonus = 1, perSecBonus = 1;
-var yakultTime = 120, yakultTimer, yakultCount = 0, yakultBuff = 1;
-var rosaCount = 0, rosaCountNext = 0, rosaLvl = 0, rosaNext, rosaBonus = 1, isLapras = false;
-var critChanse = 1, critValue = 1.5;
-var resetWorldCount = 0;
-var buyMult = 1;
+var clicks = 0,
+    timer = 0,
+    timer2 = 0,
+    omeletCount = 0,
+    totalPerClick = 1,
+    totalPerSec = 0,
+    omeletTotal = 0,
+    localBonus = 1,
+    clickBonus = 0,
+    perSecBonus = 1,
+    yakultTime = 120,
+    yakultTimer, yakultCount = 0,
+    yakultBuff = 1,
+    rosaCount = 0,
+    rosaCountNext = 0,
+    rosaLvl = 0,
+    rosaNext, rosaBonus = 1,
+    isLapras = false,
+    critChanse = 1,
+    critValue = 1.5,
+    resetWorldCount = 0,
+    buyMult = 1,
 
-var dolls = [
-    hina = { name: "hina", nameFull: "Hinaichigo", lvl: 0, mult: 1.3, bonus: 1, cost: 20, costDef: 20, tooltips: ["profit x2","+20% to all dolls","profit x2"] },
-    desu = { name: "desu", nameFull: "Suiseiseki", lvl: 0, mult: 1.3, bonus: 1, cost: 200, costDef: 200, tooltips:  ["profit x2","+30% to all dolls","profit x2"] },
-    boku = { name: "boku", nameFull: "Souseiseki", lvl: 0, mult: 1.4, bonus: 1, cost: 2000, costDef: 2000, tooltips:  ["profit x2 to Suiseiseki","- 90% Suiseiseki cost","profit x2"] },
-    shinku = { name: "shinku", nameFull: "Shinku", lvl: 0, mult: 1.4, bonus: 1, cost: 20000, costDef: 20000, tooltips:  ["x1.5 to Hina","- 90% Hina cost","x2 to Hina"] },
-    ginta = { name: "ginta", nameFull: "Suigintou", lvl: 0, mult: 1.5, bonus: 1, cost: 200000, costDef: 200000, tooltips:  ["x2 yakult","- 20 sec to yakult timer","x2 yakult"] },
-    kira = { name: "kira", nameFull: "Kirakisho", lvl: 0, mult: 1.8, bonus: 1, cost: 2000000, costDef: 2000000, tooltips:  ["-50% all dolls cost","x1.5 yakult","profit x2"] },
-    bara = { name: "bara", nameFull: "Barasuishou", lvl: 0, mult: 1.9, bonus: 1, cost: 100000000, costDef: 100000000, tooltips:  ["x2 yakult","x1.5 Rosa-Misticas","x1.5 Rosa-Misticas"] },
-];
+    dolls = [],
+    hina = {
+        name: "hina",
+        nameFull: "Hinaichigo",
+        lvl: 0,
+        mult: 1.3,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 20,
+        costDef: 20,
+        tooltips: ["profit x2", "+20% to all dolls", "profit x2"],
+        tooltipsTitle: ["Flower-topped burger!", "Watermelon!", "Unyuu!"]
+    },
 
-var upgradeText = {hina: ` + omelets per click`,
+    desu = {
+        name: "desu",
+        nameFull: "Suiseiseki",
+        lvl: 0,
+        mult: 1.3,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 200,
+        costDef: 200,
+        tooltips: ["profit x2", "+30% to all dolls", "profit x2"],
+        tooltipsTitle: ["I... hate humans, desu!", "Title 2", "Title 3"]
+    },
+    boku = {
+        name: "boku",
+        nameFull: "Souseiseki",
+        lvl: 0,
+        mult: 1.4,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 2000,
+        costDef: 2000,
+        tooltips: ["profit x2 to Suiseiseki", "- 90% Suiseiseki cost", "profit x2"],
+        tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
+    },
+    shinku = {
+        name: "shinku",
+        nameFull: "Shinku",
+        lvl: 0,
+        mult: 1.4,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 20000,
+        costDef: 20000,
+        tooltips: ["- 90% Hina cost", " +2% per/sec to per/click", "x2 to Hina"],
+        tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
+    },
+    ginta = {
+        name: "ginta",
+        nameFull: "Suigintou",
+        lvl: 0,
+        mult: 1.5,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 200000,
+        costDef: 200000,
+        tooltips: ["x2 yakult", "- 20 sec to yakult timer", "x2 yakult"],
+        tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
+    },
+    kira = {
+        name: "kira",
+        nameFull: "Kirakisho",
+        lvl: 0,
+        mult: 1.8,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 2000000,
+        costDef: 2000000,
+        tooltips: ["-50% all dolls cost", "x1.5 yakult", "profit x2"],
+        tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
+    },
+    bara = {
+        name: "bara",
+        nameFull: "Barasuishou",
+        lvl: 0,
+        mult: 1.9,
+        bonus: 1,
+        bonusGlobal: 1,
+        cost: 100000000,
+        costDef: 100000000,
+        tooltips: ["x2 yakult", "x1.5 Rosa-Misticas", "x1.5 Rosa-Misticas"],
+        tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
+    };
+
+dolls.push(hina);
+dolls.push(desu);
+dolls.push(boku);
+dolls.push(shinku);
+dolls.push(ginta);
+dolls.push(kira);
+dolls.push(bara);
+
+var upgradeText = {
+    hina: ` + omelets per click`,
     desu: `+ omelets per second`,
     boku: `Multiply omelets per second`,
     shinku: `Add omelets/click to omelets/sec`,
     ginta: `+ 200 omelets per second`,
     kira: `+5% value to all dolls`,
     bara:  `+ 5000 omelets per second and 10% to Rosa-Misticas quantity`};
+
+var buffs = {
+    hina: {lvl10: () => {hina.bonus *= 2}, lvl25: () => {localBonus *= 1.2}},
+    desu: {lvl10: () => {desu.bonus *= 2}, lvl25: () => {localBonus *= 1.3}},
+    boku: {lvl10: () => {desu.bonus *= 2}, lvl25: () => {desu.cost *= 0.1}},
+    shinku: {lvl10: () => {hina.cost *= 0.1}, lvl25: () => {clickBonus += 0.02}},
+    ginta: {lvl10: () => {yakultBuff *= 2}, lvl25: () => {yakultTime -= 20; yakultTimer -= 20; yakultProgress.value = (100 / yakultTime)*(yakultTime - yakultTimer);}},
+    kira: {lvl10: () => {dolls.forEach(function (doll = {name, lvl, cost}) {doll.cost *= 0.5})}, lvl25: () => {yakultBuff *= 1.5}},
+    bara: {lvl10: () => {yakultBuff *= 2}, lvl25: () => {rosaBonus *= 1.5}},
+};
 
 var yakultBuffs = [
     hinaBuff = { name: "hina", lvl: 0, cost: 7, mult: 1.5},
@@ -33,13 +144,13 @@ var yakultBuffs = [
 
 var rmBuffs = [
     // Jun
-    [{id: "buff00", name: "1 buff", text: "+20% per sec", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {perSecBonus = multBonus(perSecBonus, rmBuffs[0][0].lvl, 0.2)}},
-    {id: "buff01", name: "2 buff", text: "+50% Desu value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {desu.bonus = multBonus(desu.bonus, rmBuffs[0][1].lvl, 0.5)}},
-    {id: "buff02", name: "3 buff", text: "+50% Shinku value", lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {shinku.bonus = multBonus(shinku.bonus, rmBuffs[0][2].lvl, 0.5)}}],
+    [{id: "buff00", name: "Jun 1 buff", text: "% per sec", value: 20, lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {perSecBonus = multBonus(perSecBonus, rmBuffs[0][0].lvl, 0.2)}},
+    {id: "buff01", name: "Jun 2 buff", text: "% Desu value", value: 50, lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {desu.bonusGlobal = multBonus(desu.bonusGlobal, rmBuffs[0][1].lvl, 0.5)}},
+    {id: "buff02", name: "Jun 3 buff", text: "% Shinku value", value: 50, lvl: 0, lvlMax: 5, cost: 5, lvlUp: () => {shinku.bonusGlobal = multBonus(shinku.bonus, rmBuffs[0][2].lvl, 0.5)}}],
     // MicChan
-    [{id: "buff10", name: "1 buff", text: "+20% per click", lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {clickBonus = multBonus(clickBonus, rmBuffs[1][0].lvl, 0.2)}},
-    {id: "buff11", name: "2 buff", text: "1% crit chanse", lvl: 0, lvlMax: 15, cost: 2, lvlUp: () => {critChanse += 1}},
-    {id: "buff12", name: "3 buff", text: "+100% crit value", lvl: 0, lvlMax: 5, cost: 4, lvlUp: () => {critValue += 1}}],
+    [{id: "buff10", name: "MicChan 1 buff", text: "% per click", value: 20, lvl: 0, lvlMax: 10, cost: 1, lvlUp: () => {hina.bonusGlobal = multBonus(hina.bonusGlobal, rmBuffs[1][0].lvl, 0.2)}},
+    {id: "buff11", name: "MicChan 2 buff", text: "% crit chanse", value: 1, lvl: 0, lvlMax: 15, cost: 2, lvlUp: () => {critChanse += 1}},
+    {id: "buff12", name: "MicChan 3 buff", text: "% crit value", value: 100, lvl: 0, lvlMax: 5, cost: 4, lvlUp: () => {critValue += 1}}],
     //Tomoe
     [],
 ]
@@ -49,40 +160,18 @@ var rosaPic = '<img class="icon" src="img/Rosa-Mistica-icon.png" alt="Rosa-Misti
 
 function l(what) {return document.getElementById(what);}
 
-
-function multBonus (target, lvl, value){
-    return ((lvl * value + 1) * (target /((lvl - 1) * value + 1)));
+function getRandomInRange(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function rmUpgrades(buff) {
-    let newCost = (buff.lvl + 1) * buff.cost;
-    if (rosaCount >= newCost) {
-        if (buff.lvl < buff.lvlMax) {
-            rosaCount -= newCost;
-            buff.lvl++;
-            buff.lvlUp();
-            refreshRM();
-            buff.tooltip.updateTitleContent(`${buff.name} (${buff.lvl}/${buff.lvlMax}) \n \n ${buff.text}`);
-            checkRMBuffs(buff);
-        }
-    }
-    refresh();
-}
-
-function checkRMBuffs(buff){
-    newCost = (buff.lvl + 1) * buff.cost;
-    l(buff.id + "Text").innerHTML = `<div class="rmPic"></div> <span class = "rmCost"> ${newCost} </span>`; 
-    if (buff.lvl == buff.lvlMax) {
-        l(buff.id).classList.add('upgradeMax');
-        l(buff.id + "Text").innerHTML = '<span class="rmCost rmCostMax">max</span>';
-        l(buff.id + "Text").classList.add('lvlUpMax');
-    }
-}
 // Перевод чисел в короткую форму:
 var formatShort = ['k', 'M', 'B', 'T', 'Qa', 'Qi', 'Sx', 'Sp', 'Oc', 'No'];
 
 function short(value) {
     var base = 0, notationValue = '';
+    if (value == Infinity){
+        return 'Infinity';
+    }
     if (value >= 10000) {
         value /= 1000;
         while (Math.round(value) >= 1000) {
@@ -93,10 +182,6 @@ function short(value) {
     }
     return (Math.round(value * 100) / 100) + " " + notationValue;
 };
-
-function getRandomInRange(min, max) {
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  }
 
 l('x1').onclick = function() {buyButton(1)};
 l('x10').onclick = function() {buyButton(10)};
@@ -152,6 +237,9 @@ function autoClicker() {
                 yakultTimer--
                 refreshTimers();
                 yakultProgress.value += (100 / yakultTime);
+                if (yakultTimer <= 60){
+                    yakultTimer = yakultTimer % 60;
+                }
                 if (yakultTimer <= 0){
                     yakultCount = yakultCount + ginta.lvl * yakultBuff;
                     refreshYakult()
@@ -179,8 +267,7 @@ window.onload = function () {
     autoSave();
     for (let i = 0; i < rmBuffs.length; i++){
         for(let k = 0; k < rmBuffs[i].length; k++){
-            let innerText = `${rmBuffs[i][k].name} (${rmBuffs[i][k].lvl}/${rmBuffs[i][k].lvlMax}) \n\n ${rmBuffs[i][k].text}`;
-            rmBuffs[i][k].tooltip = tooltips(innerText, rmBuffs[i][k].id);
+            rmBuffs[i][k].tooltip = tooltips(setInnerTextRMBuffs(rmBuffs[i][k]), rmBuffs[i][k].id);
         }
     }
 
@@ -259,54 +346,36 @@ var popsAnimation = function(){
 }
 function dValue(doll){
     if (doll == "hina"){
-        return (hina.lvl + 1) * hina.bonus;
+        return (hina.lvl + 1) * hina.bonus * hina.bonusGlobal;
     }
     if (doll == "shinku"){
-        return shinku.lvl * shinku.bonus;
+        return shinku.lvl * shinku.bonus * shinku.bonus;
     }
     if (doll == "desu"){
-        return desu.lvl * desu.bonus;
+        return desu.lvl * desu.bonus * desu.bonus;
     }
     if (doll == "boku"){
-        return (boku.lvl + 1) * boku.bonus;
+        return (boku.lvl + 1) * boku.bonus * boku.bonus;
     }
     if (doll == "ginta"){
-        return ginta.lvl * 200 * ginta.bonus;
+        return ginta.lvl * 200 * ginta.bonus * ginta.bonus;
     }
     if (doll == "kira"){
-        return (1 + kira.lvl * kira.bonus / 20);
+        return (1 + kira.lvl * kira.bonus * kira.bonus/ 20);
     }
     if (doll == "bara"){
-        return bara.lvl * 5000 * bara.bonus;
+        return bara.lvl * 5000 * bara.bonus * bara.bonus;
     }
     if (doll == "bonus"){
-        return (rosaLvl * 0.5 + 1) * globalBonus;
+        return (rosaLvl * 0.5 + 1) * localBonus;
     }
 }
 
 function nextLvl(doll){
     doll.lvl++;
-    let dollNext2 = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus")  * clickBonus * perSecBonus * 100) / 100 - totalPerSec;
+    let dollNext2 = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus") * perSecBonus * 100) / 100 - totalPerSec;
     doll.lvl--;
-    return (Math.round(dollNext2*100)/100 + " --- " + (Math.round(doll.cost / dollNext2)* 1000) / 1000);
-}
-
-function refreshRM(){
-    for (let i = 0; i < rmBuffs.length; i++){
-        for(let k = 0; k < rmBuffs[i].length; k++){
-
-            if(rmBuffs[i][k].cost * (rmBuffs[i][k].lvl + 1) > rosaCount){
-                l(rmBuffs[i][k].id).classList.add('lvlUpNo');
-                l(rmBuffs[i][k].id + "Text").classList.add('rmLvlUpNo');
-                console.log(l(rmBuffs[i][k].id + "Cost"));
-            } else {
-                l(rmBuffs[i][k].id).classList.remove('lvlUpNo');
-                l(rmBuffs[i][k].id + "Text").classList.remove('lvlUpNo');
-            }
-        }
-    }
-    l('rosaCounter').innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
-    rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" +  short(rosaLvl * 50) + "%";
+    return short(dollNext2) + " --- " + short(doll.cost / dollNext2);
 }
 
 function refreshYakult() {
@@ -314,7 +383,7 @@ function refreshYakult() {
         yakultCounter.innerHTML = yakultPic + "<text class ='textCount'>&nbsp; you have: </text>" + short(yakultCount);
         yakultCounter2.innerHTML = "<span class ='textCount2'>Yakult you have: </span>" + short(yakultCount) + yakultPic;
         yakultBuffs.forEach(function (doll = {name, lvl, cost}) {
-            this[String(doll.name) + "BuffYakult"].innerHTML = short(doll.cost * Math.pow(10, doll.lvl)) + yakultPic;
+            this[String(doll.name) + "BuffYakult"].innerHTML = short(doll.cost * Math.pow(10, doll.lvl)) + " " +yakultPic;
             if (yakultCount >= doll.cost * Math.pow(10, doll.lvl)) {
                 this[String(doll.name) + "BuffYakult"].classList.remove('lvlUpNo');
             }
@@ -328,8 +397,8 @@ function refreshYakult() {
 
 function refresh() {
     document.getElementById("omeletCount").innerHTML =  omeletPic + "<text class = 'textCount'> you have: </text>" + short(omeletCount);
-    totalPerClick = Math.round(dValue("hina") * dValue("kira") * dValue("bonus")  * clickBonus * 100) / 100;
     totalPerSec = Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("kira") * dValue("bonus") * perSecBonus * 100) / 100;
+    totalPerClick = Math.round((dValue("hina") * dValue("kira") * dValue("bonus")  + clickBonus * totalPerSec) * 100) / 100;
     document.title = short(omeletCount) + " omelets";
     if (totalPerClick > 0) {
         omletPerClick.innerHTML = omeletPic + "<text class = 'textCount'> per click: </text>" + short(totalPerClick);
@@ -345,15 +414,15 @@ function refresh() {
     // kiraNext.innerHTML = nextLvl(kira);
     // baraNext.innerHTML = nextLvl(bara);
 
-    // hinaValue2.innerHTML = dValue("hina") * dValue("shinku");
-    // desuValue2.innerHTML = dValue("desu") * dValue("boku");
-    // gintaValue2.innerHTML = dValue("ginta");
-    // kiraValue2.innerHTML = (totalPerSec - Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("bonus") * 100) / 100)/dValue("bonus");
-    // baraValue2.innerHTML = dValue("bara");
+    // hinaValue2.innerHTML = short(dValue("hina") * dValue("shinku"));
+    // desuValue2.innerHTML = short(dValue("desu") * dValue("boku"));
+    // gintaValue2.innerHTML = short(dValue("ginta"));
+    // kiraValue2.innerHTML = short((totalPerSec - Math.round((dValue("desu") * dValue("boku") + dValue("hina") * dValue("shinku") + dValue("ginta") + dValue("bara")) * dValue("bonus") * 100) / 100)/dValue("bonus"));
+    // baraValue2.innerHTML = short(dValue("bara"));
 
     dolls.forEach(function (doll = {name, lvl, cost}) {
         let dollBlock = l(doll.name + "Block");
-        if (doll.name == "hina" || doll.name == "desu" || (desu.lvl && doll.name != "bara") || (doll.name == "bara" && resetWorldCount && isLapras)) {
+        if (doll.name == "hina" || doll.name == "desu" || (desu.lvl && doll.name != "bara") || (doll.name == "bara" && resetWorldCount)) {
             if (doll.lvl == 0 && omeletCount >= (doll.cost * 0.5) && omeletCount < doll.cost) {
                 let hireText = '<p class = "buttonText">Hire ' + doll.nameFull + '<br>for ' + short(doll.cost) + ' ' + omeletPic + '</p></div>';
                 dollBlock.innerHTML = '<div class ="button ' + doll.name + 'Button  ">' + hireText;
@@ -411,7 +480,8 @@ function addDoll(doll) {
         '<span id="' + doll.name + 'Lvlc" class="level">Level:' +
         '</span>' +
         '<button id = ' + doll.name + 'LvlUpButton class ="lvlUp" onclick="lvlUpDoll(' + doll.name + ')"><text id="' + doll.name + 'CostIn"></button>' +
-        '<progress class = "progress" id="' + doll.name + 'Progress" max="100" value="0"></progress><img id = "' + doll.name + 'Upg" class="upgrade" src="img/' + doll.name + 'Upg1.png" alt="bonus">' +
+        '<progress class = "progress" id="' + doll.name + 'Progress" max="100" value="0"></progress>' +
+        '<div id = "' + doll.name + 'Upg" class="upgrade" ><img src="img/' + doll.name + 'Upg1.png" alt="bonus"></div>' +
         '</div>';
     if (doll.name == "boku") {
         desuBlock.style.background = "linear-gradient(to right, rgba(65, 179, 50, 0.8), rgba(54, 57, 201, 0.8))";
@@ -427,8 +497,9 @@ function addDoll(doll) {
     if (doll.lvl == 0){
         lvlUpDoll(doll)
     }
-    tooltips(upgradeText[doll.name], String(doll.name) + "LvlUpButton");
-    tooltips(doll.tooltips[0], String(doll.name) + "Upg")
+    tooltips(`<span class = "titleBuff" >${doll.nameFull}</span> \n\n${upgradeText[doll.name]}`, doll.name + "LvlUpButton");
+    doll.tooltipBuff = tooltips(setInnerTextBuffs(doll, 0, 10), doll.name + "Upg");
+
 }
 
 function lvlUpDoll(doll) {
@@ -458,7 +529,6 @@ function lvlUpDoll(doll) {
         if (this[String(doll.name) + "Progress"].value >= 100){
             this[String(doll.name) + "Progress"].value = 0;
         }
-
         if (doll.lvl > 25 && doll.lvl % 25 == 0){
             if (doll == bara){
                 rosaCountNext *= 1.5;
@@ -486,71 +556,16 @@ function lvlUpDoll(doll) {
 
 function upgrade(doll){
     if (doll.lvl == 10){
-        this[String(doll.name) + "Upg"].outerHTML = '<img id = "'+ doll.name + 'Upg" class="upgrade" src="img/'+ doll.name +'Upg2.png" alt="bonus"></img>';
-        tooltips(doll.tooltips[1], String(doll.name) + "Upg")
+        this[String(doll.name) + "Upg"].innerHTML = '<img src="img/'+ doll.name +'Upg2.png" alt="bonus"></img>';
+        doll.tooltipBuff.updateTitleContent(setInnerTextBuffs(doll, 1, 25));
+        buffs[doll.name].lvl10();
     } else {
-        this[String(doll.name) + "Upg"].outerHTML = '<img id = "'+ doll.name + 'Upg" class="upgrade" src="img/'+ doll.name +'Upg3.png" alt="bonus"></img>';
-        tooltips(doll.tooltips[2], String(doll.name) + "Upg")
+        this[String(doll.name) + "Upg"].innerHTML = '<img src="img/'+ doll.name +'Upg3.png" alt="bonus"></img>';
+        doll.tooltipBuff.updateTitleContent(setInnerTextBuffs(doll, 2, 'every 25'));
+        buffs[doll.name].lvl25();
     }
-
-    if (doll == hina){
-        if (hina.lvl == 10){
-            hina.bonus *= 2;
-            return;
-        }
-        globalBonus *= 1.2;
-
-    }
-    if (doll == desu){
-        if (desu.lvl == 10){
-            desu.bonus *= 2;
-            return;
-        }
-        globalBonus *= 1.3;
-    }
-    if (doll == boku){
-        if (boku.lvl == 10){
-            desu.bonus *= 2;
-            return;
-        }
-        desu.cost *= 0.1;
-    }
-    if (doll == shinku){
-        if (shinku.lvl == 10){
-            hina.bonus *= 1.5;
-            return;
-        }
-        hina.cost *= 0.1;
-    }
-    if (doll == ginta){
-        if (ginta.lvl == 10){
-            yakultBuff *= 2;
-            return;
-        }
-        yakultTime -= 20;
-        yakultTimer -= 20;
-        yakultProgress.value = (100 / yakultTime)*(yakultTime - yakultTimer);
-
-    }
-    if (doll == kira){
-        if (kira.lvl == 10){
-            dolls.forEach(function (doll = {name, lvl, cost}) {
-                doll.cost *= 0.5; 
-            })
-            return;
-        }
-        yakultBuff *= 1.5;
-    }
-    if (doll == bara){
-        if (bara.lvl == 10){
-            yakultBuff *= 2;
-            return;
-        }
-        rosaBonus *= 1.5;
-    }
-
-
 }
+
 function lvlUpYakult(buff) {
     if (yakultCount >= buff.cost*Math.pow(10,buff.lvl)){
         yakultCount = yakultCount - buff.cost*Math.pow(10,buff.lvl);
@@ -560,10 +575,11 @@ function lvlUpYakult(buff) {
         refreshYakult();        
     }
 }
+
 function save() {
     localStorage.setItem("omeletCount", omeletCount);
     localStorage.setItem("omeletTotal", omeletTotal);
-    localStorage.setItem("globalBonus", globalBonus);
+    localStorage.setItem("localBonus", localBonus);
     localStorage.setItem("yakultCount", yakultCount);
     localStorage.setItem("clicks", clicks);
     localStorage.setItem("yakultTimer", yakultTimer);
@@ -575,10 +591,15 @@ function save() {
     localStorage.setItem("isLapras", isLapras);
     localStorage.setItem("resetWorldCount", resetWorldCount);
     localStorage.setItem("yakultBuff", yakultBuff);
+    localStorage.setItem("critChanse", critChanse);
+    localStorage.setItem("critValue", critValue);
+    localStorage.setItem("clickBonus", clickBonus);
+    localStorage.setItem("perSecBonus", perSecBonus);
     dolls.forEach(function (doll = { name, nameFull, lvl, mult, bonus, cost, costDef }) {
         localStorage.setItem(doll.name + " lvl", doll.lvl);
         localStorage.setItem(doll.name + " cost", doll.cost);
         localStorage.setItem(doll.name + " bonus", doll.bonus);
+        localStorage.setItem(doll.name + " bonusGlobal", doll.bonusGlobal);
     });
 
     for (let i = 0; i < rmBuffs.length; i++){
@@ -588,13 +609,11 @@ function save() {
     }
 
     localStorage.setItem("chSave", document.getElementById("auSave").checked);
-    console.log(JSON.parse(localStorage.getItem("chSave")));
     yakultBuffs.forEach(function (doll = { name, lvl, cost }) {
         localStorage.setItem(doll.name + "Buff lvl", doll.lvl);
     });
     note.innerHTML = "Save game...";
-    note.style.display = "block";
-    setTimeout(function() { note.style.display = "none"; }, 5000);
+    showPopUp();
 }
 
 function load() {
@@ -605,7 +624,7 @@ function load() {
     }
     document.getElementById("defaultOpen").click();
     omeletTotal = parseFloat(localStorage.getItem("omeletTotal"));
-    globalBonus = parseFloat(localStorage.getItem("globalBonus"));
+    localBonus = parseFloat(localStorage.getItem("localBonus"));
     yakultCount = parseInt(localStorage.getItem("yakultCount"));
     yakultBuff = parseInt(localStorage.getItem("yakultBuff"));
     clicks = parseInt(localStorage.getItem("clicks"));
@@ -614,17 +633,23 @@ function load() {
     rosaLvl = parseInt(localStorage.getItem("rosaLvl"));
     rosaNext = parseInt(localStorage.getItem("rosaNext"));
     rosaBonus = parseInt(localStorage.getItem("rosaBonus"));
+    critChanse = parseInt(localStorage.getItem("critChanse"));
+    critValue = parseFloat(localStorage.getItem("critValue"));
     isLapras = JSON.parse(localStorage.getItem("isLapras"));
+    perSecBonus = parseFloat(localStorage.getItem("perSecBonus"));
+    clickBonus = parseFloat(localStorage.getItem("clickBonus"));
     resetWorldCount = parseInt(localStorage.getItem("resetWorldCount"));
     dolls.forEach(function (doll = {
         name,
         lvl,
         bonus,
         cost,
+        bonusGlobal,
     }) {
         doll.lvl = parseInt(localStorage.getItem(doll.name + " lvl"));
         doll.cost = parseFloat(localStorage.getItem(doll.name + " cost"));
         doll.bonus = parseFloat(localStorage.getItem(doll.name + " bonus"));
+        doll.bonusGlobal = parseFloat(localStorage.getItem(doll.name + " bonusGlobal"));
         this[String(doll.name) + "Block"].outerHTML = '<div id="' + doll.name + 'Block"></div>'; 
         if (doll.lvl) {
             addDoll(doll);
@@ -673,13 +698,13 @@ function load() {
         yakultCounter.innerHTML = "";
     }
     document.getElementById("auSave").checked = JSON.parse(localStorage.getItem("chSave"));
-    console.log(document.getElementById("auSave").checked);
     clearInterval(timer2);
     if (isLapras) {
         laprasBlock.outerHTML = '<div class = "button laprasBlock" id="laprasBlock"><span id="total"></span><br><button id="restartText" class = "restartButton" onclick="resetWorld()"></button></div>';
     }
     refresh();
     refreshYakult()
+    refreshRM();
     autoSave();
     if (omeletCount == 0) {
         counters.style.display = "none";
@@ -694,7 +719,7 @@ function load() {
     } else {
         deleteClick2();
     }
-    if (rosaCount) {
+    if (rosaLvl) {
         tablinks[2].style.display = "block";
         refreshRM();
         buyButtons.style.display = "block";
@@ -710,12 +735,11 @@ function resetWorld() {
     tablinks[2].style.display = "block";
     tablinks[1].style.display = "none";
     buyButtons.style.display = "block";
-    refreshRM();
     reset();
 }
 function reset() {
     omeletCount = 0;
-    globalBonus = 1;
+    localBonus = 1;
     yakultCount = 0;
     yakultBuff = 1;
     yakultTime = 120;
@@ -723,6 +747,7 @@ function reset() {
     clicks = 0;
     rosaNext = 0;
     rosaBonus = 1;
+    clickBonus = 0;
     dolls.forEach(function (doll = {lvl, bonus, cost}) {
         doll.lvl = 0;
         doll.cost = doll.costDef;
@@ -731,20 +756,14 @@ function reset() {
     yakultBuffs.forEach(function (doll = { name, lvl, cost }) {
         doll.lvl = 0;
     });
-    for (let i = 0; i < rmBuffs.length; i++){
-        for(let k = 0; k < rmBuffs[i].length; k++){
-            rmBuffs[i][k].lvl = 0;
-        }
-    }
-    counters.style.display = "none";
     laprasBlock.outerHTML = '<div id="laprasBlock"></div>';
     omletPerClick.innerHTML = "";
     omletPerSec.innerHTML = "";
     yakultCounter.innerHTML = "";
     isLapras = false; 
-    firstClick.outerHTML = '<div class = "click" id ="firstClick"  onclick="deleteClick() ">Click me!</div>';
     refresh();
-    refreshYakult()
+    refreshYakult();
+    refreshRM();
     document.title = "Kanaria likes omlettes";
     firstClick.onmousemove = function (event) {
         event = event || window.event;
@@ -758,15 +777,30 @@ function resetFull() {
     omeletTotal = 0;
     resetWorldCount = 0;
     rosaLvl = 0;
+    critChanse = 1;
+    critValue = 1.5;
+    perSecBonus = 1;
+    dolls.forEach(function (doll = {bonusGlobal}) {
+        doll.bonusGlobal = 1;})
     document.getElementById("defaultOpen").click();
     tablinks = document.getElementsByClassName("tablinks");
+    counters.style.display = "none";
+    firstClick.outerHTML = '<div class = "click" id ="firstClick"  onclick="deleteClick() ">Click me!</div>';
     buyButtons.style.display = "none";
     for (i = 1; i < tablinks.length; i++) {
         tablinks[i].style.display = "none";
-      }
-      tablinks[3].style.display = "block";
+    }
+    tablinks[3].style.display = "block";
+    for (let i = 0; i < rmBuffs.length; i++) {
+        for (let k = 0; k < rmBuffs[i].length; k++) {
+            rmBuffs[i][k].lvl = 0;
+            checkRMBuffs(rmBuffs[i][k]);
+            l(rmBuffs[i][k].id).classList.remove('upgradeMax');
+            l(rmBuffs[i][k].id + "Text").classList.remove('lvlUpMax');
+            rmBuffs[i][k].tooltip.updateTitleContent(setInnerTextRMBuffs(rmBuffs[i][k]));
+        }
+    }
     reset();
-
 }
 
 //Читы
@@ -774,16 +808,19 @@ function cheatOn(){
     if (code.value == "cheats on"){
         cheatButtons.style.display = "block";
         note.innerHTML = "Cheats on";
+        showPopUp();
     }
     if (code.value == "cheats off"){
         cheatButtons.style.display = "none";
         note.innerHTML = "Cheats off";
+        showPopUp();
     }
     document.getElementById("defaultOpen").click();
+}
+function showPopUp(){
     note.style.display = "block";
     setTimeout(function() { note.style.display = "none"; }, 5000);
 }
-
 function cheat(x, target) {
     if (target == 'omelet') {
         omeletCount += x;
@@ -842,6 +879,7 @@ function tooltips(text, id) { tooltip = new Tooltip(document.getElementById(id),
         delay: {
             show: 300,
         },
+        html: true,
 
     });
     return tooltip;
@@ -854,7 +892,6 @@ function buy(x, cost, mult) {
     for (let i = 0; i <= (x - 2); i++) {
         step = Math.round(step * mult);
         result += step;
-        console.log(step, result);
     }
     return result;
 }
@@ -869,4 +906,65 @@ function buyMax(cost, mult) {
         result += step;
     }
     return n;
+}
+
+function setInnerTextBuffs(doll, x, lvl){
+    return `<div><span class = "titleBuff" >${doll.tooltipsTitle[x]}</span>\n\n <span class = "levelBuff" >${doll.tooltips[x]}</span> \n\nRequires level: ${lvl}</div>`
+}
+// --------------------------
+// Roza-Mictica
+// --------------------------
+function refreshRM() {
+    for (let i = 0; i < rmBuffs.length; i++) {
+        for (let k = 0; k < rmBuffs[i].length; k++) {
+                if (rmBuffs[i][k].cost * (rmBuffs[i][k].lvl + 1) > rosaCount) {
+                    l(rmBuffs[i][k].id).classList.add('lvlUpNo');
+                    l(rmBuffs[i][k].id + "Text").classList.add('rmLvlUpNo');
+                } else {
+                    l(rmBuffs[i][k].id).classList.remove('lvlUpNo');
+                    l(rmBuffs[i][k].id + "Text").classList.remove('rmLvlUpNo');
+                }
+        }
+    }
+    l('rosaCounter').innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
+    rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" + short(rosaLvl * 50) + "%";
+}
+
+function rmUpgrades(buff) {
+    let newCost = (buff.lvl + 1) * buff.cost;
+    if (rosaCount >= newCost) {
+        if (buff.lvl < buff.lvlMax) {
+            rosaCount -= newCost;
+            buff.lvl++;
+            buff.lvlUp();
+            refreshRM();
+            buff.tooltip.updateTitleContent(setInnerTextRMBuffs(buff));
+            checkRMBuffs(buff);
+        }
+    }
+    refresh();
+}
+
+function checkRMBuffs(buff){
+    newCost = (buff.lvl + 1) * buff.cost;
+    l(buff.id + "Text").innerHTML = `<div class="rmPic"></div> <span class = "rmCost"> ${newCost} </span>`; 
+    if (buff.lvl == buff.lvlMax) {
+        l(buff.id).classList.add('upgradeMax');
+        l(buff.id + "Text").innerHTML = '<span class="rmCost rmCostMax">max</span>';
+        l(buff.id + "Text").classList.add('lvlUpMax');
+    }
+}
+
+function setInnerTextRMBuffs(buff){
+    if (buff.lvl == 0){
+        return `<span class = "titleBuff" >${buff.name}</span> \n\n <span class = "levelBuff" >Level 1:</span>\n +${buff.value}${buff.text}\n\n Max level: ${buff.lvlMax}`;
+    }
+    if (buff.lvl == buff.lvlMax){
+        return `<span class = "titleBuff" >${buff.name}</span> \n\n <span class = "levelBuff" >Level ${buff.lvl}:</span>\n +${buff.value * buff.lvl}${buff.text}\n\n Max level`;
+    }
+    return `<span class = "titleBuff" >${buff.name}</span> \n\n <span class = "levelBuff" >Level ${buff.lvl}:</span>\n +${buff.value * buff.lvl}${buff.text}\n\n <span class = "levelBuff" >Next level:</span>\n +${buff.value * (buff.lvl + 1)}${buff.text}\n\n Max level: ${buff.lvlMax}`;
+}
+
+function multBonus (target, lvl, value){
+    return ((lvl * value + 1) * (target /((lvl - 1) * value + 1)));
 }
