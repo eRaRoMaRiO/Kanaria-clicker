@@ -1147,8 +1147,11 @@ function load() {
         tablinks[2].style.display = "block";
         refreshRM();
         buyButtons.style.display = "block";
+    } else {
+        tablinks[2].style.display = "none";
+        refreshRM();
+        buyButtons.style.display = "none";
     }
-    tablinks[3].style.display = "block";
 }
 
 function resetWorld() {
