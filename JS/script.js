@@ -1143,7 +1143,7 @@ function load() {
     } else {
         deleteClick('noClick');
     }
-    if (rosaLvl) {
+    if (resetWorldCount) {
         tablinks[2].style.display = "block";
         refreshRM();
         buyButtons.style.display = "block";
