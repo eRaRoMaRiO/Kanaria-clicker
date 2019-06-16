@@ -236,7 +236,7 @@ body {
 }
 
 .rmButton {
-    background: url(../img/Rosa-Mistica-icon.png) no-repeat 50% 50% #ece8e8;
+    background: url(../img/Rosa-Mystica-icon.png) no-repeat 50% 50% #ece8e8;
 }
 
 .yakultButton {
@@ -796,7 +796,7 @@ button::-moz-focus-inner {
 .rmPic {
     position: absolute;
     left: 5px;
-    background: url(../img/Rosa-Mistica-icon.png) no-repeat 50% 50%;
+    background: url(../img/Rosa-Mystica-icon.png) no-repeat 50% 50%;
     width: 27px;
     height: 28px;
 }

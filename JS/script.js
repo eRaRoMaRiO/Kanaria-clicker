@@ -21,6 +21,7 @@ var clicks = 0,
     critValue = 1.5,
     resetWorldCount = 0,
     buyMult = 1,
+    laprasTooltip,
     popX,
     popY,
     Pops=[],
@@ -108,7 +109,7 @@ var clicks = 0,
         bonusGlobal: 1,
         cost: 100000000,
         costDef: 100000000,
-        tooltips: ["x2 yakult", "x1.5 Rosa-Misticas", "x1.5 Rosa-Misticas"],
+        tooltips: ["x2 yakult", "x1.5 Rosa-Mysticas", "x1.5 Rosa-Mysticas"],
         tooltipsTitle: ["Title 1", "Title 2", "Title 3"]
     },
 
@@ -119,7 +120,7 @@ var clicks = 0,
         shinku: `Add omelets/click to omelets/sec`,
         ginta: `+ 200 omelets per second \nand yakult production`,
         kira: `+5% value to all dolls`,
-        bara: `+ 5000 omelets per second \nand 10% to Rosa-Misticas production`
+        bara: `+ 5000 omelets per second \nand 10% to Rosa-Mysticas production`
     },
 
     buffs = {
@@ -228,7 +229,7 @@ var clicks = 0,
             {
                 id: "buff01",
                 name: "Jun 2 buff",
-                text: "% Desu value",
+                text: "% Suiseiseki value",
                 value: 50,
                 lvl: 0,
                 lvlMax: 5,
@@ -304,7 +305,7 @@ var clicks = 0,
             {
                 id: "buff21",
                 name: "Tomoe 2 buff",
-                text: "% Rosa-Misticas production",
+                text: "% Rosa-Mysticas production",
                 value: 10,
                 lvl: 0,
                 lvlMax: 10,
@@ -332,7 +333,7 @@ var clicks = 0,
 
     omeletPic = '<img class="icon" src="img/Omelet-icon.png" alt="omelet"></img>',
     yakultPic = '<img class="icon" src="img/Yakult-icon.png" alt="yakult"></img>',
-    rosaPic = '<img class="icon" src="img/Rosa-Mistica-icon.png" alt="Rosa-Mistica"></img>';
+    rosaPic = '<img class="icon" src="img/Rosa-Mystica-icon.png" alt="Rosa-Mystica"></img>';
 
 dolls.push(hina);
 dolls.push(desu);
@@ -358,6 +359,12 @@ function l(what) {
 
 function getRandomInRange(min, max) {
     return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+for (let i = 0; i < rmBuffs.length; i++) {
+    for (let k = 0; k < rmBuffs[i].length; k++) {
+        checkRMBuffs(rmBuffs[i][k]);
+    }
 }
 
 l('x1').onclick = function () {buyButton(1)};
@@ -840,13 +847,15 @@ function refresh() {
     if (omeletTotal > (Math.pow((rosaLvl + 1),2.5) * 20000000) && kira.lvl && isLapras == false){
         laprasBlock.outerHTML = '<div class = "button laprasBlock" id="laprasBlock"><span id="total"></span><br><button id="restartText" class = "restartButton" onclick="showAlert(123)"></button></div>';
         isLapras = true;
+        laprasTooltip = tooltips(`Text`, "restartText");
     }
     if (isLapras){
         rosaNext = Math.floor(Math.pow(omeletTotal/20000000, 0.4)) - rosaLvl;
         rosaCountNext = Math.floor(rosaNext * (1 + bara.lvl * 0.1) * rosaBonus);
-        restartText.innerHTML = `Restart world <br>and  get ${rosaCountNext} ${rosaPic}`;
+        restartText.innerHTML = `Reset world <br>and  get ${rosaCountNext} ${rosaPic}`;
         let omeletsForNextRose = short((Math.pow((rosaLvl + rosaNext + 1),2.5) * 20000000) - omeletTotal);
         total.innerHTML = `Produce ${omeletsForNextRose} ${omeletPic} <br> for next ${rosaPic}`;
+        laprasTooltip.updateTitleContent(`<span class = "titleBuff" >Reset world</span> \n\n Resets your current world and granting you <b>${rosaCountNext}</b> Rosa-Mysticas. \n\n Each Rosa-Mystica increase value of all dolls by <b>50%</b> and allows to buy mentors upgrades.`);
     }
 }
 
@@ -945,7 +954,7 @@ function refreshRM() {
             }
         }
     }
-    l('rosaCounter').innerHTML = "<span class ='textCount2'>Rosa-Misticas you have: </span>" + short(rosaCount);
+    l('rosaCounter').innerHTML = "<span class ='textCount2'>Rosa-Mysticas you have: </span>" + short(rosaCount);
     rosaBuffs.innerHTML = "<span class ='textCount2'>Total buff to omelet production: </span>" + short(rosaLvl * 50) + "%";
 }
 
@@ -1119,6 +1128,7 @@ function load() {
     clearInterval(timer2);
     if (isLapras) {
         laprasBlock.outerHTML = '<div class = "button laprasBlock" id="laprasBlock"><span id="total"></span><br><button id="restartText" class = "restartButton" onclick="showAlert(123)"></button></div>';
+        laprasTooltip = tooltips(`Text`, "restartText");
     }
     refresh();
     refreshYakult()
